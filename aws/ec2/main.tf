@@ -58,11 +58,16 @@ resource "aws_instance" "payments-app" {
   vpc_security_group_ids      = [aws_security_group.payments-app.id]
   subnet_id                   = data.terraform_remote_state.vpc.outputs.public_subnets[0]
   iam_instance_profile        = aws_iam_instance_profile.payments-app.name
+  user_data                   = data.template_file.init.rendered
   associate_public_ip_address = true
   tags = {
     Name = "payments-app"
     opal = ""
   }
+}
+
+data "template_file" "init" {
+  template = file("${path.module}/scripts/payments.sh")
 }
 
 resource "aws_iam_instance_profile" "payments-app" {

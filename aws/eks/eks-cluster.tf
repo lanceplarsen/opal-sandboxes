@@ -24,7 +24,12 @@ module "eks" {
       rolearn  = aws_iam_role.eks_cluster_admin_role.arn
       username = aws_iam_role.eks_cluster_admin_role.name
       groups   = ["system:masters"]
-    }
+    },
+    {
+      rolearn  = aws_iam_role.eks_cluster_viewer_role.arn
+      username = aws_iam_role.eks_cluster_viewer_role.name
+      groups   = ["viewers"]
+    },
   ]
 
 }

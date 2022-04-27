@@ -77,7 +77,7 @@ resource "aws_db_instance" "product-db" {
   tags = {
     opal                 = "",
     "opal:database-name" = "product"
-    "opal:group:readaccess" = var.opal_group
+    "opal:group:readonly" = var.opal_group
   }
 }
 

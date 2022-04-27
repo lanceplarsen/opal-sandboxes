@@ -26,6 +26,11 @@ resource "aws_iam_role_policy_attachment" "ec2-viewer" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ReadOnlyAccess"
 }
 
+resource "aws_iam_role_policy_attachment" "rds-viewer" {
+  role       = aws_iam_role.viewer.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonRDSReadOnlyAccess"
+}
+
 resource "aws_iam_policy" "eks-reader" {
   name        = "EKSReader"
   description = "Read access to EKS"

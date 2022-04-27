@@ -10,3 +10,30 @@ provider "kubernetes" {
   token                  = data.aws_eks_cluster_auth.cluster.token
   cluster_ca_certificate = base64decode(data.aws_eks_cluster.cluster.certificate_authority.0.data)
 }
+
+resource "kubernetes_cluster_role" "pod-viewers" {
+  metadata {
+    name = "cluster-viewer"
+  }
+  rule {
+    api_groups = [""]
+    resources  = ["namespaces", "pods", "services"]
+    verbs      = ["get", "list", "watch"]
+  }
+}
+
+resource "kubernetes_cluster_role_binding" "pod-viewers" {
+  metadata {
+    name = "cluster-viewer"
+  }
+  role_ref {
+    api_group = "rbac.authorization.k8s.io"
+    kind      = "ClusterRole"
+    name      = "cluster-viewer"
+  }
+  subject {
+    kind      = "Group"
+    name      = "viewers"
+    api_group = "rbac.authorization.k8s.io"
+  }
+}
