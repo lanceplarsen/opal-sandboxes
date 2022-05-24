@@ -1,7 +1,7 @@
 data "aws_caller_identity" "current" {}
 
 resource "aws_iam_role" "admin" {
-  name               = "ComputeAdmin"
+  name               = "Admin"
   assume_role_policy = <<EOF
 {
   "Version": "2012-10-17",
@@ -9,7 +9,7 @@ resource "aws_iam_role" "admin" {
     {
       "Effect": "Allow",
       "Principal": {
-        "AWS": "arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"
+        "AWS": "arn:aws:iam::${data.aws_caller_identity.current.account_id}:user/opal"
       },
       "Action": "sts:AssumeRole"
     }
@@ -20,7 +20,7 @@ EOF
 
 resource "aws_iam_role_policy_attachment" "ec2-admin" {
   role       = aws_iam_role.admin.name
-  policy_arn = "arn:aws:iam::aws:policy/AmazonEC2FullAccess"
+  policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess"
 }
 
 resource "aws_iam_role" "viewer" {
@@ -32,7 +32,7 @@ resource "aws_iam_role" "viewer" {
     {
       "Effect": "Allow",
       "Principal": {
-        "AWS": "arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"
+        "AWS": "arn:aws:iam::${data.aws_caller_identity.current.account_id}:user/opal"
       },
       "Action": "sts:AssumeRole"
     }
