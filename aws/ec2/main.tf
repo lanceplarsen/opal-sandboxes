@@ -63,6 +63,7 @@ resource "aws_instance" "payments-app" {
   tags = {
     Name = "payments-app"
     opal = ""
+    "opal:group" = var.opal_group
   }
 }
 
