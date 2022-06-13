@@ -36,13 +36,6 @@ resource "aws_security_group" "payments-app" {
   description = "payments-app"
   vpc_id      = data.terraform_remote_state.vpc.outputs.vpc
 
-  ingress {
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
   egress {
     from_port   = 0
     to_port     = 0
