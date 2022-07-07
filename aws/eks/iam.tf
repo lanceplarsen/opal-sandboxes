@@ -26,18 +26,13 @@ resource "aws_iam_role" "eks_cluster_admin_role" {
     {
       "Effect": "Allow",
       "Principal": {
-        "AWS": "arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"
+        "AWS": "arn:aws:iam::${data.aws_caller_identity.current.account_id}:user/opal"
       },
       "Action": "sts:AssumeRole"
     }
   ]
 }
 POLICY
-
-  tags = {
-    "opal:eks:cluster-arn" = module.eks.cluster_arn
-    //"opal:group:${module.eks.cluster_arn}" = var.opal_group
-  }
 
   max_session_duration = 12 * 60 * 60
 }
@@ -76,18 +71,13 @@ resource "aws_iam_role" "eks_cluster_viewer_role" {
     {
       "Effect": "Allow",
       "Principal": {
-        "AWS": "arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"
+        "AWS": "arn:aws:iam::${data.aws_caller_identity.current.account_id}:user/opal"
       },
       "Action": "sts:AssumeRole"
     }
   ]
 }
 POLICY
-
-  tags = {
-    "opal:eks:cluster-arn" = module.eks.cluster_arn
-    "opal:group:${module.eks.cluster_arn}" = var.opal_group
-  }
 
   max_session_duration = 12 * 60 * 60
 }
