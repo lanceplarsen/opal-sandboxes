@@ -36,6 +36,7 @@ module "eks" {
     "opal" = ""
     "opal:eks:role:1" = aws_iam_role.eks_cluster_admin_role.name
     "opal:eks:role:2" = aws_iam_role.eks_cluster_viewer_role.name
+    "opal:group:${aws_iam_role.eks_cluster_viewer_role.name}" = var.opal_group
   }
 
 }
