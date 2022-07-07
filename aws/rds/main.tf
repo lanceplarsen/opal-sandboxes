@@ -13,8 +13,8 @@ data "terraform_remote_state" "infra" {
 data "aws_availability_zones" "available" {}
 
 resource "random_password" "password" {
-  length           = 16
-  special          = false
+  length  = 16
+  special = false
 }
 
 resource "aws_security_group" "rds" {
@@ -75,8 +75,8 @@ resource "aws_db_instance" "product-db" {
   skip_final_snapshot                 = true
   iam_database_authentication_enabled = true
   tags = {
-    opal                 = "",
-    "opal:database-name" = "product"
+    opal                  = "",
+    "opal:database-name"  = "product"
     "opal:group:readonly" = var.opal_group
   }
 }
