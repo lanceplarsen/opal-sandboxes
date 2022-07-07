@@ -39,8 +39,8 @@ resource "aws_security_group" "payments-app" {
   }
 }
 
-resource "aws_instance" "payments-app" {
-  instance_type               = "t3.small"
+resource "aws_instance" "payments-dev" {
+  instance_type               = "t3.micro"
   ami                         = data.aws_ami.ubuntu.id
   key_name                    = data.terraform_remote_state.vpc.outputs.ssh_key_name
   vpc_security_group_ids      = [aws_security_group.payments-app.id]
@@ -49,9 +49,24 @@ resource "aws_instance" "payments-app" {
   user_data                   = data.template_file.init.rendered
   associate_public_ip_address = true
   tags = {
-    Name         = "payments-app"
+    Name         = "payments-dev"
     opal         = ""
     "opal:group" = var.opal_group
+  }
+}
+
+resource "aws_instance" "payments-prod" {
+  instance_type               = "t3.micro"
+  ami                         = data.aws_ami.ubuntu.id
+  key_name                    = data.terraform_remote_state.vpc.outputs.ssh_key_name
+  vpc_security_group_ids      = [aws_security_group.payments-app.id]
+  subnet_id                   = data.terraform_remote_state.vpc.outputs.public_subnets[0]
+  iam_instance_profile        = aws_iam_instance_profile.payments-app.name
+  user_data                   = data.template_file.init.rendered
+  associate_public_ip_address = true
+  tags = {
+    Name         = "payments-prod"
+    opal         = ""
   }
 }
 
