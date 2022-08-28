@@ -65,8 +65,8 @@ resource "aws_instance" "payments-prod" {
   user_data                   = data.template_file.init.rendered
   associate_public_ip_address = true
   tags = {
-    Name         = "payments-prod"
-    opal         = ""
+    Name = "payments-prod"
+    opal = ""
   }
 }
 

@@ -17,7 +17,7 @@ EOF
 }
 
 resource "aws_iam_role" "eks_cluster_admin_role" {
-  name = "FrontendClusterDeveloper"
+  name = "FrontendClusterAdmin"
 
   assume_role_policy = <<POLICY
 {
