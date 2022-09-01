@@ -10,20 +10,20 @@ data "terraform_remote_state" "vpc" {
   }
 }
 
-data "aws_ami" "ubuntu" {
+data "aws_ami" "amazon-linux-2" {
   most_recent = true
+
+
+  filter {
+    name   = "owner-alias"
+    values = ["amazon"]
+  }
+
 
   filter {
     name   = "name"
-    values = ["ubuntu/images/hvm-ssd/ubuntu-bionic-18.04-amd64-server-*"]
+    values = ["amzn2-ami-hvm*"]
   }
-
-  filter {
-    name   = "virtualization-type"
-    values = ["hvm"]
-  }
-
-  owners = ["099720109477"] # Canonical
 }
 
 resource "aws_security_group" "payments-app" {
@@ -41,12 +41,11 @@ resource "aws_security_group" "payments-app" {
 
 resource "aws_instance" "payments-dev" {
   instance_type               = "t3.micro"
-  ami                         = data.aws_ami.ubuntu.id
+  ami                         = data.aws_ami.amazon-linux-2.id
   key_name                    = data.terraform_remote_state.vpc.outputs.ssh_key_name
   vpc_security_group_ids      = [aws_security_group.payments-app.id]
   subnet_id                   = data.terraform_remote_state.vpc.outputs.public_subnets[0]
   iam_instance_profile        = aws_iam_instance_profile.payments-app.name
-  user_data                   = data.template_file.init.rendered
   associate_public_ip_address = true
   tags = {
     Name         = "payments-dev"
@@ -57,21 +56,16 @@ resource "aws_instance" "payments-dev" {
 
 resource "aws_instance" "payments-prod" {
   instance_type               = "t3.micro"
-  ami                         = data.aws_ami.ubuntu.id
+  ami                         = data.aws_ami.amazon-linux-2.id
   key_name                    = data.terraform_remote_state.vpc.outputs.ssh_key_name
   vpc_security_group_ids      = [aws_security_group.payments-app.id]
   subnet_id                   = data.terraform_remote_state.vpc.outputs.public_subnets[0]
   iam_instance_profile        = aws_iam_instance_profile.payments-app.name
-  user_data                   = data.template_file.init.rendered
   associate_public_ip_address = true
   tags = {
     Name = "payments-prod"
     opal = ""
   }
-}
-
-data "template_file" "init" {
-  template = file("${path.module}/scripts/payments.sh")
 }
 
 resource "aws_iam_instance_profile" "payments-app" {
