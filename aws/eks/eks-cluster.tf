@@ -28,7 +28,17 @@ module "eks" {
     {
       rolearn  = aws_iam_role.eks_cluster_viewer_role.arn
       username = aws_iam_role.eks_cluster_viewer_role.name
-      groups   = ["viewers"]
+      groups   = ["opal:viewer"]
+    },
+    {
+      rolearn  = aws_iam_role.eks_cluster_backend_role.arn
+      username = aws_iam_role.eks_cluster_backend_role.name
+      groups   = ["opal:backend-admin"]
+    },
+    {
+      rolearn  = aws_iam_role.eks_cluster_data_science_role.arn
+      username = aws_iam_role.eks_cluster_data_science_role.name
+      groups   = ["opal:data-science-admin"]
     },
   ]
 
@@ -36,6 +46,8 @@ module "eks" {
     "opal"                                                    = ""
     "opal:eks:role:1"                                         = aws_iam_role.eks_cluster_admin_role.name
     "opal:eks:role:2"                                         = aws_iam_role.eks_cluster_viewer_role.name
+    "opal:eks:role:3"                                         = aws_iam_role.eks_cluster_backend_role.name
+    "opal:eks:role:4"                                         = aws_iam_role.eks_cluster_data_science_role.name
     "opal:group:${aws_iam_role.eks_cluster_viewer_role.name}" = var.opal_group
     "opal:group:${aws_iam_role.eks_cluster_admin_role.name}"  = var.opal_group
   }

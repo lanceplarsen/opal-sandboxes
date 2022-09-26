@@ -1,39 +1,68 @@
-# Kubernetes provider
-# https://learn.hashicorp.com/terraform/kubernetes/provision-eks-cluster#optional-configure-terraform-kubernetes-provider
-# To learn how to schedule deployments and services using the provider, go here: https://learn.hashicorp.com/terraform/kubernetes/deploy-nginx-kubernetes
-
-# The Kubernetes provider is included in this file so the EKS module can complete successfully. Otherwise, it throws an error when creating `kubernetes_config_map.aws_auth`.
-# You should **not** schedule deployments and services in this workspace. This keeps workspaces modular (one for provision EKS, another for scheduling Kubernetes resources) as per best practices.
-
-provider "kubernetes" {
-  host                   = data.aws_eks_cluster.cluster.endpoint
-  token                  = data.aws_eks_cluster_auth.cluster.token
-  cluster_ca_certificate = base64decode(data.aws_eks_cluster.cluster.certificate_authority.0.data)
-}
-
-resource "kubernetes_cluster_role" "pod-viewers" {
+#namespaces
+resource "kubernetes_namespace" "backend" {
   metadata {
-    name = "cluster-viewer"
+    annotations = {
+      name = "backend"
+    }
+    name = "backend"
   }
-  rule {
-    api_groups = [""]
-    resources  = ["namespaces", "pods", "services"]
-    verbs      = ["get", "list", "watch"]
+}
+resource "kubernetes_namespace" "data-science" {
+  metadata {
+    annotations = {
+      name = "data-science"
+    }
+    name = "data-science"
   }
 }
 
-resource "kubernetes_cluster_role_binding" "pod-viewers" {
+#cluster role bindings
+resource "kubernetes_cluster_role_binding" "cluster-viewer" {
   metadata {
-    name = "cluster-viewer"
+    name = "opal:viewers"
   }
   role_ref {
     api_group = "rbac.authorization.k8s.io"
     kind      = "ClusterRole"
-    name      = "cluster-viewer"
+    name      = "view"
   }
   subject {
     kind      = "Group"
-    name      = "viewers"
+    name      = "opal:viewer"
+    api_group = "rbac.authorization.k8s.io"
+  }
+}
+
+#role bindings
+resource "kubernetes_role_binding" "backend-admin" {
+  metadata {
+    name      = "opal:backend-admin"
+    namespace = "backend"
+  }
+  role_ref {
+    api_group = "rbac.authorization.k8s.io"
+    kind      = "ClusterRole"
+    name      = "admin"
+  }
+  subject {
+    kind      = "Group"
+    name      = "opal:backend-admin"
+    api_group = "rbac.authorization.k8s.io"
+  }
+}
+resource "kubernetes_role_binding" "data-science-admin" {
+  metadata {
+    name      = "opal:data-science-admin"
+    namespace = "data-science"
+  }
+  role_ref {
+    api_group = "rbac.authorization.k8s.io"
+    kind      = "ClusterRole"
+    name      = "admin"
+  }
+  subject {
+    kind      = "Group"
+    name      = "opal:data-science-admin"
     api_group = "rbac.authorization.k8s.io"
   }
 }
