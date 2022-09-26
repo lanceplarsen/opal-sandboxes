@@ -80,7 +80,7 @@ resource "aws_iam_policy" "AmazonEKSViewer" {
                 "eks:ListClusters",
                 "eks:DescribeAddonVersions"
             ],
-            "Resource": "*"
+            "Resource": "${module.eks.cluster_arn}"
         }
     ]
 }
