@@ -54,7 +54,7 @@ resource "aws_iam_policy" "AmazonEKSViewer" {
                 "eks:DescribeCluster",
                 "eks:ListClusters"
             ],
-            "Resource": "*"
+            "Resource": "${module.eks.cluster_arn}"
         }
     ]
 }
