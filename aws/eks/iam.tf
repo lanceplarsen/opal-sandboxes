@@ -49,10 +49,36 @@ resource "aws_iam_policy" "AmazonEKSViewer" {
     "Version": "2012-10-17",
     "Statement": [
         {
+            "Sid": "ClusterResources",
             "Effect": "Allow",
             "Action": [
+                "eks:ListFargateProfiles",
+                "eks:ListNodegroups",
+                "eks:DescribeFargateProfile",
+                "eks:ListTagsForResource",
+                "eks:DescribeIdentityProviderConfig",
+                "eks:ListUpdates",
+                "eks:DescribeUpdate",
+                "eks:AccessKubernetesApi",
+                "eks:ListAddons",
                 "eks:DescribeCluster",
-                "eks:ListClusters"
+                "eks:ListIdentityProviderConfigs",
+                "eks:DescribeAddon"
+            ],
+            "Resource": [
+                "arn:aws:eks:${var.region}:${data.aws_caller_identity.current.account_id}:addon/${module.eks.cluster_id}/*/*",
+                "arn:aws:eks:${var.region}:${data.aws_caller_identity.current.account_id}:cluster/${module.eks.cluster_id}",
+                "arn:aws:eks:${var.region}:${data.aws_caller_identity.current.account_id}:fargateprofile/${module.eks.cluster_id}/*/*",
+                "arn:aws:eks:${var.region}:${data.aws_caller_identity.current.account_id}:identityproviderconfig/${module.eks.cluster_id}/*/*/*",
+                "arn:aws:eks:${var.region}:${data.aws_caller_identity.current.account_id}:nodegroup/${module.eks.cluster_id}/*/*"
+            ]
+        },
+        {
+            "Sid": "AccountResources",
+            "Effect": "Allow",
+            "Action": [
+                "eks:ListClusters",
+                "eks:DescribeAddonVersions"
             ],
             "Resource": "*"
         }
