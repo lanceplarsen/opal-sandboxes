@@ -1,18 +1,10 @@
 #namespaces
-resource "kubernetes_namespace" "backend" {
+resource "kubernetes_namespace" "public-api" {
   metadata {
     annotations = {
-      name = "backend"
+      name = "public-api"
     }
-    name = "backend"
-  }
-}
-resource "kubernetes_namespace" "data-science" {
-  metadata {
-    annotations = {
-      name = "data-science"
-    }
-    name = "data-science"
+    name = "public-api"
   }
 }
 
@@ -28,16 +20,16 @@ resource "kubernetes_cluster_role_binding" "cluster-viewer" {
   }
   subject {
     kind      = "Group"
-    name      = "opal:viewer"
+    name      = "opal:viewers"
     api_group = "rbac.authorization.k8s.io"
   }
 }
 
 #role bindings
-resource "kubernetes_role_binding" "backend-admin" {
+resource "kubernetes_role_binding" "public-api-admin" {
   metadata {
-    name      = "opal:backend-admin"
-    namespace = "backend"
+    name      = "opal:public-api-admins"
+    namespace = "public-api"
   }
   role_ref {
     api_group = "rbac.authorization.k8s.io"
@@ -46,23 +38,7 @@ resource "kubernetes_role_binding" "backend-admin" {
   }
   subject {
     kind      = "Group"
-    name      = "opal:backend-admin"
-    api_group = "rbac.authorization.k8s.io"
-  }
-}
-resource "kubernetes_role_binding" "data-science-admin" {
-  metadata {
-    name      = "opal:data-science-admin"
-    namespace = "data-science"
-  }
-  role_ref {
-    api_group = "rbac.authorization.k8s.io"
-    kind      = "ClusterRole"
-    name      = "admin"
-  }
-  subject {
-    kind      = "Group"
-    name      = "opal:data-science-admin"
+    name      = "opal:public-api-admins"
     api_group = "rbac.authorization.k8s.io"
   }
 }

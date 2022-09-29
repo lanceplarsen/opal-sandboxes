@@ -1,7 +1,7 @@
 data "aws_caller_identity" "current" {}
 
 resource "aws_iam_policy" "AmazonEKSAdminPolicy" {
-  name   = "AmazonEKSAdminPolicy"
+  name   = "EKSFrontendClusterAdminPolicy"
   policy = <<EOF
 {
    "Version":"2012-10-17",
@@ -27,7 +27,7 @@ EOF
 }
 
 resource "aws_iam_role" "eks_cluster_admin_role" {
-  name               = "FrontendClusterAdmin"
+  name               = "EKSFrontendClusterAdmin"
   assume_role_policy = <<POLICY
 {
   "Version": "2012-10-17",
@@ -55,7 +55,7 @@ resource "aws_iam_role_policy_attachment" "AmazonEKSAdminPolicy" {
 }
 
 resource "aws_iam_policy" "AmazonEKSViewer" {
-  name   = "AmazonEKSViewerPolicy"
+  name   = "EKSFrontendClusterViewerPolicy"
   policy = <<EOF
 {
   "Version": "2012-10-17",
@@ -100,7 +100,7 @@ EOF
 }
 
 resource "aws_iam_role" "eks_cluster_viewer_role" {
-  name               = "FrontendClusterViewer"
+  name               = "EKSFrontendClusterViewer"
   assume_role_policy = <<POLICY
 {
   "Version": "2012-10-17",
@@ -127,33 +127,9 @@ resource "aws_iam_role_policy_attachment" "AmazonEKSViewerPolicy" {
   role       = aws_iam_role.eks_cluster_viewer_role.name
 }
 
-
 #namespace policies
-resource "aws_iam_role" "eks_cluster_backend_role" {
-  name               = "FrontendClusterBackendNamespaceAdmin"
-  assume_role_policy = <<POLICY
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Principal": {
-        "AWS": "arn:aws:iam::${data.aws_caller_identity.current.account_id}:user/opal"
-      },
-      "Action": "sts:AssumeRole"
-    }
-  ]
-}
-POLICY
-  tags = {
-    "opal"       = ""
-    "opal:group" = var.opal_group
-  }
-  max_session_duration = 12 * 60 * 60
-}
-
-resource "aws_iam_role" "eks_cluster_data_science_role" {
-  name               = "FrontendClusterDataScienceNamespaceAdmin"
+resource "aws_iam_role" "eks_cluster_public_api_role" {
+  name               = "EKSFrontendClusterNamespacePublicAPI"
   assume_role_policy = <<POLICY
 {
   "Version": "2012-10-17",
