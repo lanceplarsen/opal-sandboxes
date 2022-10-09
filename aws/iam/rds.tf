@@ -1,4 +1,4 @@
-resource "aws_iam_role" "rds-admin" {
+resource "aws_iam_role" "rds_admin" {
   name               = "RDSAdmin"
   assume_role_policy = <<EOF
 {
@@ -16,7 +16,7 @@ resource "aws_iam_role" "rds-admin" {
 EOF
 }
 
-resource "aws_iam_role_policy_attachment" "rds-admin" {
-  role       = aws_iam_role.rds-admin.name
+resource "aws_iam_role_policy_attachment" "rds_admin" {
+  role       = aws_iam_role.rds_admin.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonRDSFullAccess"
 }

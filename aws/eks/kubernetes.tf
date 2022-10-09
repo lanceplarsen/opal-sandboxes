@@ -1,4 +1,4 @@
-#namespaces
+#namespaces per team
 resource "kubernetes_namespace" "public-api" {
   metadata {
     annotations = {
@@ -7,8 +7,16 @@ resource "kubernetes_namespace" "public-api" {
     name = "public-api"
   }
 }
+resource "kubernetes_namespace" "web" {
+  metadata {
+    annotations = {
+      name = "web"
+    }
+    name = "web"
+  }
+}
 
-#cluster role bindings
+#cluster role binding - cluster viewers
 resource "kubernetes_cluster_role_binding" "cluster-viewer" {
   metadata {
     name = "opal:viewers"
@@ -25,8 +33,8 @@ resource "kubernetes_cluster_role_binding" "cluster-viewer" {
   }
 }
 
-#role bindings
-resource "kubernetes_role_binding" "public-api-admin" {
+#role bindings - namespace admins
+resource "kubernetes_role_binding" "developer-web" {
   metadata {
     name      = "opal:public-api-admins"
     namespace = "public-api"
@@ -38,7 +46,23 @@ resource "kubernetes_role_binding" "public-api-admin" {
   }
   subject {
     kind      = "Group"
+    name      = "opal:developers-web"
+    api_group = "rbac.authorization.k8s.io"
+  }
+}
+resource "kubernetes_role_binding" "developer-public-api" {
+  metadata {
     name      = "opal:public-api-admins"
+    namespace = "public-api"
+  }
+  role_ref {
+    api_group = "rbac.authorization.k8s.io"
+    kind      = "ClusterRole"
+    name      = "admin"
+  }
+  subject {
+    kind      = "Group"
+    name      = "opal:developers-public-api"
     api_group = "rbac.authorization.k8s.io"
   }
 }

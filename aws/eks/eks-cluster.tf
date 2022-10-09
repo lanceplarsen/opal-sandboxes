@@ -1,3 +1,12 @@
+
+data "aws_eks_cluster" "cluster" {
+  name = module.eks.cluster_id
+}
+
+data "aws_eks_cluster_auth" "cluster" {
+  name = module.eks.cluster_id
+}
+
 module "eks" {
   source          = "terraform-aws-modules/eks/aws"
   version         = "17.24.0"
@@ -21,37 +30,28 @@ module "eks" {
 
   map_roles = [
     {
-      rolearn  = aws_iam_role.eks_cluster_admin_role.arn
-      username = aws_iam_role.eks_cluster_admin_role.name
-      groups   = ["system:masters"]
-    },
-    {
-      rolearn  = aws_iam_role.eks_cluster_viewer_role.arn
-      username = aws_iam_role.eks_cluster_viewer_role.name
+      rolearn  = data.terraform_remote_state.iam.outputs.eks_cluster_viewer.arn
+      username = data.terraform_remote_state.iam.outputs.eks_cluster_viewer.name
       groups   = ["opal:viewers"]
     },
     {
-      rolearn  = aws_iam_role.eks_cluster_public_api_role.arn
-      username = aws_iam_role.eks_cluster_public_api_role.name
-      groups   = ["opal:public-api-admins"]
+      rolearn  = data.terraform_remote_state.iam.outputs.developer_frontend.arn
+      username = data.terraform_remote_state.iam.outputs.developer_frontend.name
+      groups   = ["opal:developers-web"]
+    },
+    {
+      rolearn  = data.terraform_remote_state.iam.outputs.developer_frontend.arn
+      username = data.terraform_remote_state.iam.outputs.developer_frontend.name
+      groups   = ["opal:developers-public-api"]
     },
   ]
 
   cluster_tags = {
-    "opal"                                                    = ""
-    "opal:eks:role:1"                                         = aws_iam_role.eks_cluster_admin_role.name
-    "opal:eks:role:2"                                         = aws_iam_role.eks_cluster_viewer_role.name
-    "opal:eks:role:3"                                         = aws_iam_role.eks_cluster_public_api_role.name
-    "opal:group:${aws_iam_role.eks_cluster_viewer_role.name}" = var.opal_group
-    "opal:group:${aws_iam_role.eks_cluster_admin_role.name}"  = var.opal_group
+    "opal"                                                                          = ""
+    "opal:eks:role:1"                                                               = data.terraform_remote_state.iam.outputs.eks_cluster_admin.name
+    "opal:eks:role:2"                                                               = data.terraform_remote_state.iam.outputs.eks_cluster_viewer.name
+    "opal:eks:role:3"                                                               = data.terraform_remote_state.iam.outputs.developer_frontend.name
+    "opal:group:${data.terraform_remote_state.iam.outputs.eks_cluster_viewer.name}" = var.opal_group
   }
 
-}
-
-data "aws_eks_cluster" "cluster" {
-  name = module.eks.cluster_id
-}
-
-data "aws_eks_cluster_auth" "cluster" {
-  name = module.eks.cluster_id
 }

@@ -1,4 +1,4 @@
-resource "aws_iam_role" "ec2-admin" {
+resource "aws_iam_role" "ec2_admin" {
   name               = "EC2Admin"
   assume_role_policy = <<EOF
 {
@@ -16,7 +16,7 @@ resource "aws_iam_role" "ec2-admin" {
 EOF
 }
 
-resource "aws_iam_role_policy_attachment" "ec2-admin" {
-  role       = aws_iam_role.ec2-admin.name
+resource "aws_iam_role_policy_attachment" "ec2_admin" {
+  role       = aws_iam_role.ec2_admin.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonEC2FullAccess"
 }
