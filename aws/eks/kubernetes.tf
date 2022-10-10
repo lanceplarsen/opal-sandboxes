@@ -36,7 +36,7 @@ resource "kubernetes_cluster_role_binding" "cluster-viewer" {
 #role bindings - namespace admins
 resource "kubernetes_role_binding" "developer-web" {
   metadata {
-    name      = "opal:public-api-admins"
+    name      = "opal:web-admin"
     namespace = "public-api"
   }
   role_ref {
@@ -52,7 +52,7 @@ resource "kubernetes_role_binding" "developer-web" {
 }
 resource "kubernetes_role_binding" "developer-public-api" {
   metadata {
-    name      = "opal:public-api-admins"
+    name      = "opal:public-api-admin"
     namespace = "public-api"
   }
   role_ref {

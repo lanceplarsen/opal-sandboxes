@@ -33,11 +33,6 @@ resource "aws_iam_role_policy_attachment" "eks_cluster_admin_eks_admin" {
   role       = aws_iam_role.eks_cluster_admin.name
 }
 
-resource "aws_iam_role_policy_attachment" "eks_cluster_admin_eks_viewer" {
-  policy_arn = aws_iam_policy.eks_cluster_read_only.arn
-  role       = aws_iam_role.eks_cluster_admin.name
-}
-
 resource "aws_iam_role_policy_attachment" "eks_cluster_admin_iam_viewer" {
   policy_arn = "arn:aws:iam::aws:policy/IAMReadOnlyAccess"
   role       = aws_iam_role.eks_cluster_admin.name
@@ -45,6 +40,11 @@ resource "aws_iam_role_policy_attachment" "eks_cluster_admin_iam_viewer" {
 
 resource "aws_iam_role_policy_attachment" "eks_cluster_admin_ec2_viewer" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ReadOnlyAccess"
+  role       = aws_iam_role.eks_cluster_admin.name
+}
+
+resource "aws_iam_role_policy_attachment" "eks_cluster_admin_eks_viewer" {
+  policy_arn = aws_iam_policy.eks_cluster_read_only.arn
   role       = aws_iam_role.eks_cluster_admin.name
 }
 
