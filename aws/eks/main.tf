@@ -2,11 +2,6 @@ data "aws_caller_identity" "current" {}
 
 provider "aws" {
   region = var.region
-
-  assume_role {
-    role_arn = data.terraform_remote_state.iam.outputs.eks_cluster_admin.arn
-  }
-
 }
 
 provider "kubernetes" {

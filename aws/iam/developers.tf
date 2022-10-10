@@ -17,6 +17,12 @@ resource "aws_iam_role" "dev_team_frontend" {
 EOF
 }
 
+resource "aws_iam_role_policy_attachment" "eks_cluster_admin_cluster" {
+  policy_arn = "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy"
+  role       = aws_iam_role.eks_cluster_admin.name
+}
+
+
 #backend
 resource "aws_iam_role" "dev_team_backend" {
   name               = "DeveloperBackend"

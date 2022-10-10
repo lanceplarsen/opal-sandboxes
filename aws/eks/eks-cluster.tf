@@ -30,6 +30,11 @@ module "eks" {
 
   map_roles = [
     {
+      rolearn  = data.terraform_remote_state.iam.outputs.eks_cluster_admin.arn
+      username = data.terraform_remote_state.iam.outputs.eks_cluster_admin.name
+      groups   = ["system:masters"]
+    },
+    {
       rolearn  = data.terraform_remote_state.iam.outputs.eks_cluster_viewer.arn
       username = data.terraform_remote_state.iam.outputs.eks_cluster_viewer.name
       groups   = ["opal:viewers"]
