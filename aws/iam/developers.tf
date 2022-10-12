@@ -17,6 +17,11 @@ resource "aws_iam_role" "dev_team_frontend" {
 EOF
 }
 
+resource "aws_iam_role_policy_attachment" "dev_team_frontend_eks" {
+  role       = aws_iam_role.dev_team_frontend.name
+  policy_arn = aws_iam_policy.eks_cluster_read_only.arn
+}
+
 #backend
 resource "aws_iam_role" "dev_team_backend" {
   name               = "DeveloperBackend"
