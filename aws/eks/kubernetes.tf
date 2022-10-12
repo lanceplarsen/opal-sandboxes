@@ -37,7 +37,7 @@ resource "kubernetes_cluster_role_binding" "cluster-viewer" {
 resource "kubernetes_role_binding" "developer-web" {
   metadata {
     name      = "opal:web-admin"
-    namespace = "public-api"
+    namespace = "web"
   }
   role_ref {
     api_group = "rbac.authorization.k8s.io"

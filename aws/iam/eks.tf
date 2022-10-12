@@ -69,6 +69,20 @@ resource "aws_iam_policy" "eks_cluster_read_only" {
         "eks:DescribeAddon"
       ],
       "Resource": "*"
+    },
+    {
+      "Sid": "ViewLogs",
+      "Effect": "Allow",
+      "Action": [
+        "logs:Describe*",
+        "logs:Get*",
+        "logs:List*",
+        "logs:StartQuery",
+        "logs:StopQuery",
+        "logs:TestMetricFilter",
+        "logs:FilterLogEvents"
+      ],
+      "Resource": "*"
     }
   ]
 }
