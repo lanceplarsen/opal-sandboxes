@@ -18,7 +18,7 @@ POLICY
     "opal"       = ""
     "opal:group" = var.opal_group
   }
-  max_session_duration = 12 * 60 * 60
+  max_session_duration = 1 * 60 * 60
 }
 
 resource "aws_iam_policy" "eks_cluster_admin" {
@@ -82,6 +82,26 @@ resource "aws_iam_policy" "eks_cluster_read_only" {
         "logs:StopQuery",
         "logs:TestMetricFilter",
         "logs:FilterLogEvents"
+      ],
+      "Resource": "*"
+    }
+  ]
+}
+EOF
+}
+
+resource "aws_iam_policy" "eks_cluster_list_only" {
+  name   = "EKSClusterListAccess"
+  policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "ViewCluster",
+      "Effect": "Allow",
+      "Action": [
+        "eks:ListClusters",
+        "eks:DescribeCluster"
       ],
       "Resource": "*"
     }
