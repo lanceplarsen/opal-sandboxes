@@ -17,7 +17,7 @@ resource "kubernetes_namespace" "web" {
 }
 
 #cluster role binding - cluster viewers
-resource "kubernetes_role" "view_nodes" {
+resource "kubernetes_cluster_role" "view_nodes" {
   metadata {
     name = "view-nodes"
   }
