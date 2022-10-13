@@ -17,21 +17,23 @@ module "eks" {
 
   cluster_enabled_log_types = ["audit","api","authenticator"]
 
-  self_managed_node_group_defaults = {
+
+  eks_managed_node_group_defaults = {
     root_volume_type = "gp2"
     instance_type    = "t3.small"
     iam_role_additional_policies = [
       "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
     ]
   }
-  self_managed_node_groups = {
-    one = {
-      name         = "worker-1"
+  eks_managed_node_groups = {
+    worker = {
+      name         = "worker"
       max_size     = 3
-      desired_size = 1
+      desired_size = 3
     }
   }
 
+  manage_aws_auth_configmap = true
   aws_auth_roles = [
     {
       rolearn  = data.terraform_remote_state.iam.outputs.eks_cluster_admin.arn
