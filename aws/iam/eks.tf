@@ -57,6 +57,7 @@ resource "aws_iam_policy" "eks_cluster_read_only" {
         "eks:DescribeAddonVersions",
         "eks:ListFargateProfiles",
         "eks:ListNodegroups",
+        "eks:DescribeNodegroup",
         "eks:DescribeFargateProfile",
         "eks:ListTagsForResource",
         "eks:DescribeIdentityProviderConfig",

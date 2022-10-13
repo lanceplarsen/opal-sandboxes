@@ -17,6 +17,16 @@ resource "kubernetes_namespace" "web" {
 }
 
 #cluster role binding - cluster viewers
+resource "kubernetes_role" "view-nodes" {
+  metadata {
+    name = "view-nodes"
+  }
+  rule {
+    api_groups = [""]
+    resources  = ["nodes"]
+    verbs      = ["get", "list", "watch"]
+  }
+}
 resource "kubernetes_cluster_role_binding" "cluster-viewer" {
   metadata {
     name = "opal:viewers"
@@ -25,6 +35,11 @@ resource "kubernetes_cluster_role_binding" "cluster-viewer" {
     api_group = "rbac.authorization.k8s.io"
     kind      = "ClusterRole"
     name      = "view"
+  }
+  role_ref {
+    api_group = "rbac.authorization.k8s.io"
+    kind      = "ClusterRole"
+    name      = "view-nodes"
   }
   subject {
     kind      = "Group"
