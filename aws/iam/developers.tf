@@ -24,8 +24,8 @@ resource "aws_iam_role_policy_attachment" "dev_team_frontend_eks" {
 }
 
 #backend
-resource "aws_iam_role" "dev_team_backend" {
-  name               = "DeveloperBackend"
+resource "aws_iam_role" "dev_team_product" {
+  name               = "DeveloperProduct"
   assume_role_policy = <<EOF
 {
   "Version": "2012-10-17",
@@ -41,6 +41,11 @@ resource "aws_iam_role" "dev_team_backend" {
 }
 EOF
 max_session_duration = 12 * 60 * 60
+}
+
+resource "aws_iam_role_policy_attachment" "dev_team_product_eks" {
+  role       = aws_iam_role.dev_team_product.name
+  policy_arn = aws_iam_policy.eks_cluster_list_only.arn
 }
 
 #data-science
@@ -63,6 +68,11 @@ EOF
 max_session_duration = 12 * 60 * 60
 }
 
+resource "aws_iam_role_policy_attachment" "dev_team_data_science_eks" {
+  role       = aws_iam_role.dev_team_data_science.name
+  policy_arn = aws_iam_policy.eks_cluster_list_only.arn
+}
+
 #payments
 resource "aws_iam_role" "dev_team_payments" {
   name               = "DeveloperPayments"
@@ -81,4 +91,9 @@ resource "aws_iam_role" "dev_team_payments" {
 }
 EOF
 max_session_duration = 12 * 60 * 60
+}
+
+resource "aws_iam_role_policy_attachment" "dev_team_payments_eks" {
+  role       = aws_iam_role.dev_team_payments.name
+  policy_arn = aws_iam_policy.eks_cluster_list_only.arn
 }
