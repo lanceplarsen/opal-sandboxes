@@ -12,24 +12,28 @@ module "eks" {
   version         = "18.30.1"
   cluster_name    = var.cluster_name
   cluster_version = "1.23"
-  subnet_ids         = data.terraform_remote_state.infra.outputs.private_subnets
-  vpc_id = data.terraform_remote_state.infra.outputs.vpc
+  subnet_ids      = data.terraform_remote_state.infra.outputs.private_subnets
+  vpc_id          = data.terraform_remote_state.infra.outputs.vpc
 
-  cluster_enabled_log_types = ["audit","api","authenticator"]
+  cluster_enabled_log_types = ["audit", "api", "authenticator"]
 
 
   eks_managed_node_group_defaults = {
-    root_volume_type = "gp2"
-    instance_type    = "t3.small"
+    instance_types = ["t3.small"]
     iam_role_additional_policies = [
-      "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+      "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore",
+      "arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy"
     ]
   }
+
   eks_managed_node_groups = {
     worker = {
-      name         = "worker"
+      name         = "frontend-worker"
       max_size     = 3
-      desired_size = 3
+      desired_size = 1
+      launch_template_tags = {
+        "opal" = ""
+      }
     }
   }
 
@@ -48,7 +52,7 @@ module "eks" {
     {
       rolearn  = data.terraform_remote_state.iam.outputs.developer_frontend.arn
       username = data.terraform_remote_state.iam.outputs.developer_frontend.name
-      groups   = ["opal:developers-web","opal:developers-public-api"]
+      groups   = ["opal:developers-web", "opal:developers-public-api"]
     }
   ]
 

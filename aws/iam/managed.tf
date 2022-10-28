@@ -1,20 +1,7 @@
 #Administrator Access
 resource "aws_iam_role" "admin" {
   name               = "AdministratorAccess"
-  assume_role_policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Principal": {
-        "AWS": "arn:aws:iam::${data.aws_caller_identity.current.account_id}:user/opal"
-      },
-      "Action": "sts:AssumeRole"
-    }
-  ]
-}
-EOF
+  assume_role_policy = data.aws_iam_policy_document.opal_assume_role_policy.json
 }
 
 resource "aws_iam_role_policy_attachment" "admin" {
@@ -25,25 +12,10 @@ resource "aws_iam_role_policy_attachment" "admin" {
 #View Only
 resource "aws_iam_role" "view_only" {
   name               = "ViewOnly"
-  assume_role_policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Principal": {
-        "AWS": "arn:aws:iam::${data.aws_caller_identity.current.account_id}:user/opal"
-      },
-      "Action": "sts:AssumeRole"
-    }
-  ]
-}
-EOF
-
+  assume_role_policy = data.aws_iam_policy_document.opal_assume_role_policy.json
   tags = {
     "opal:group" = var.opal_group
   }
-
 }
 
 resource "aws_iam_role_policy_attachment" "view_only" {
@@ -54,20 +26,7 @@ resource "aws_iam_role_policy_attachment" "view_only" {
 #Power User
 resource "aws_iam_role" "power_user" {
   name               = "PowerUser"
-  assume_role_policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Principal": {
-        "AWS": "arn:aws:iam::${data.aws_caller_identity.current.account_id}:user/opal"
-      },
-      "Action": "sts:AssumeRole"
-    }
-  ]
-}
-EOF
+  assume_role_policy = data.aws_iam_policy_document.opal_assume_role_policy.json
 }
 
 resource "aws_iam_role_policy_attachment" "power_user" {
@@ -78,20 +37,7 @@ resource "aws_iam_role_policy_attachment" "power_user" {
 #Security Audit
 resource "aws_iam_role" "security_audit" {
   name               = "SecurityAudit"
-  assume_role_policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Principal": {
-        "AWS": "arn:aws:iam::${data.aws_caller_identity.current.account_id}:user/opal"
-      },
-      "Action": "sts:AssumeRole"
-    }
-  ]
-}
-EOF
+  assume_role_policy = data.aws_iam_policy_document.opal_assume_role_policy.json
 }
 
 resource "aws_iam_role_policy_attachment" "security_audit" {
@@ -102,20 +48,7 @@ resource "aws_iam_role_policy_attachment" "security_audit" {
 #IAM - read only
 resource "aws_iam_role" "iam_read_only" {
   name               = "IAMViewer"
-  assume_role_policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Principal": {
-        "AWS": "arn:aws:iam::${data.aws_caller_identity.current.account_id}:user/opal"
-      },
-      "Action": "sts:AssumeRole"
-    }
-  ]
-}
-EOF
+  assume_role_policy = data.aws_iam_policy_document.opal_assume_role_policy.json
 }
 
 resource "aws_iam_role_policy_attachment" "iam_read_only" {

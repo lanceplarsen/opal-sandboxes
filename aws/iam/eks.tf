@@ -1,19 +1,7 @@
+#admin
 resource "aws_iam_role" "eks_cluster_admin" {
   name               = "EKSClusterAdmin"
-  assume_role_policy = <<POLICY
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Principal": {
-        "AWS": "arn:aws:iam::${data.aws_caller_identity.current.account_id}:user/opal"
-      },
-      "Action": "sts:AssumeRole"
-    }
-  ]
-}
-POLICY
+  assume_role_policy = data.aws_iam_policy_document.opal_assume_role_policy.json
   tags = {
     "opal"       = ""
     "opal:group" = var.opal_group
@@ -43,6 +31,7 @@ resource "aws_iam_role_policy_attachment" "eks_cluster_admin_cluster" {
   role       = aws_iam_role.eks_cluster_admin.name
 }
 
+#view
 resource "aws_iam_policy" "eks_cluster_read_only" {
   name   = "EKSClusterReadOnlyAccess"
   policy = <<EOF
@@ -90,6 +79,22 @@ resource "aws_iam_policy" "eks_cluster_read_only" {
 EOF
 }
 
+resource "aws_iam_role" "eks_cluster_viewer" {
+  name               = "EKSClusterViewer"
+  assume_role_policy = data.aws_iam_policy_document.opal_assume_role_policy.json
+  tags = {
+    "opal"       = ""
+    "opal:group" = var.opal_group
+  }
+  max_session_duration = 12 * 60 * 60
+}
+
+resource "aws_iam_role_policy_attachment" "eks_cluster_viewer_read_only" {
+  policy_arn = aws_iam_policy.eks_cluster_read_only.arn
+  role       = aws_iam_role.eks_cluster_viewer.name
+}
+
+#dev access
 resource "aws_iam_policy" "eks_cluster_list_only" {
   name   = "EKSClusterListAccess"
   policy = <<EOF
@@ -108,32 +113,4 @@ resource "aws_iam_policy" "eks_cluster_list_only" {
   ]
 }
 EOF
-}
-
-resource "aws_iam_role" "eks_cluster_viewer" {
-  name               = "EKSClusterViewer"
-  assume_role_policy = <<POLICY
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Principal": {
-        "AWS": "arn:aws:iam::${data.aws_caller_identity.current.account_id}:user/opal"
-      },
-      "Action": "sts:AssumeRole"
-    }
-  ]
-}
-POLICY
-  tags = {
-    "opal"       = ""
-    "opal:group" = var.opal_group
-  }
-  max_session_duration = 12 * 60 * 60
-}
-
-resource "aws_iam_role_policy_attachment" "eks_cluster_viewer_read_only" {
-  policy_arn = aws_iam_policy.eks_cluster_read_only.arn
-  role       = aws_iam_role.eks_cluster_viewer.name
 }
