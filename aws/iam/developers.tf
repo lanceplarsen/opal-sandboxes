@@ -1,7 +1,7 @@
 #frontend
 resource "aws_iam_role" "dev_team_frontend" {
-  name               = "DeveloperFrontend"
-  assume_role_policy = <<EOF
+  name                 = "DeveloperFrontend"
+  assume_role_policy   = <<EOF
 {
   "Version": "2012-10-17",
   "Statement": [
@@ -15,7 +15,7 @@ resource "aws_iam_role" "dev_team_frontend" {
   ]
 }
 EOF
-max_session_duration = 12 * 60 * 60
+  max_session_duration = 12 * 60 * 60
 }
 
 resource "aws_iam_role_policy_attachment" "dev_team_frontend_eks" {
@@ -25,8 +25,8 @@ resource "aws_iam_role_policy_attachment" "dev_team_frontend_eks" {
 
 #backend
 resource "aws_iam_role" "dev_team_product" {
-  name               = "DeveloperProduct"
-  assume_role_policy = <<EOF
+  name                 = "DeveloperProduct"
+  assume_role_policy   = <<EOF
 {
   "Version": "2012-10-17",
   "Statement": [
@@ -40,7 +40,7 @@ resource "aws_iam_role" "dev_team_product" {
   ]
 }
 EOF
-max_session_duration = 12 * 60 * 60
+  max_session_duration = 12 * 60 * 60
 }
 
 resource "aws_iam_role_policy_attachment" "dev_team_product_eks" {
@@ -50,8 +50,8 @@ resource "aws_iam_role_policy_attachment" "dev_team_product_eks" {
 
 #data-science
 resource "aws_iam_role" "dev_team_data_science" {
-  name               = "DeveloperDataScience"
-  assume_role_policy = <<EOF
+  name                 = "DeveloperDataScience"
+  assume_role_policy   = <<EOF
 {
   "Version": "2012-10-17",
   "Statement": [
@@ -65,7 +65,7 @@ resource "aws_iam_role" "dev_team_data_science" {
   ]
 }
 EOF
-max_session_duration = 12 * 60 * 60
+  max_session_duration = 12 * 60 * 60
 }
 
 resource "aws_iam_role_policy_attachment" "dev_team_data_science_eks" {
@@ -75,8 +75,8 @@ resource "aws_iam_role_policy_attachment" "dev_team_data_science_eks" {
 
 #payments
 resource "aws_iam_role" "dev_team_payments" {
-  name               = "DeveloperPayments"
-  assume_role_policy = <<EOF
+  name                 = "DeveloperPayments"
+  assume_role_policy   = <<EOF
 {
   "Version": "2012-10-17",
   "Statement": [
@@ -90,7 +90,7 @@ resource "aws_iam_role" "dev_team_payments" {
   ]
 }
 EOF
-max_session_duration = 12 * 60 * 60
+  max_session_duration = 12 * 60 * 60
 }
 
 resource "aws_iam_role_policy_attachment" "dev_team_payments_eks" {

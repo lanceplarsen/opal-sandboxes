@@ -12,10 +12,10 @@ module "eks" {
   version         = "18.30.1"
   cluster_name    = var.cluster_name
   cluster_version = "1.23"
-  subnet_ids         = data.terraform_remote_state.infra.outputs.private_subnets
-  vpc_id = data.terraform_remote_state.infra.outputs.vpc
+  subnet_ids      = data.terraform_remote_state.infra.outputs.private_subnets
+  vpc_id          = data.terraform_remote_state.infra.outputs.vpc
 
-  cluster_enabled_log_types = ["audit","api","authenticator"]
+  cluster_enabled_log_types = ["audit", "api", "authenticator"]
 
 
   eks_managed_node_group_defaults = {
@@ -54,7 +54,7 @@ module "eks" {
       rolearn  = data.terraform_remote_state.iam.outputs.developer_payments.arn
       username = data.terraform_remote_state.iam.outputs.developer_payments.name
       groups   = ["opal:developers-payments"]
-    }
+    },
     {
       rolearn  = data.terraform_remote_state.iam.outputs.developer_data_science.arn
       username = data.terraform_remote_state.iam.outputs.developer_data_science.name
