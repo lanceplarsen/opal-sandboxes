@@ -9,8 +9,8 @@ provider "aws" {
 
 data "aws_availability_zones" "available" {}
 
-resource "aws_key_pair" "demo" {
-  key_name   = "lance"
+resource "aws_key_pair" "sandbox" {
+  key_name   = "sandbox"
   public_key = var.ssh_public_key
 }
 
@@ -18,7 +18,7 @@ module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
   version = "3.2.0"
 
-  name                 = "demo-app"
+  name                 = "opal-sandbox"
   cidr                 = "10.0.0.0/16"
   azs                  = data.aws_availability_zones.available.names
   private_subnets      = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24"]

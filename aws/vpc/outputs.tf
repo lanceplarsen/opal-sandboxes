@@ -4,7 +4,7 @@ output "region" {
 }
 
 output "ssh_key_name" {
-  value = aws_key_pair.demo.key_name
+  value = aws_key_pair.sandbox.key_name
 }
 
 output "vpc" {
