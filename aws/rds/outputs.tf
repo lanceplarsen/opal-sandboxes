@@ -1,16 +1,16 @@
 output "rds_hostname" {
   description = "RDS instance hostname"
-  value       = aws_db_instance.product-db.address
+  value       = aws_db_instance.product_db.address
 }
 
 output "rds_port" {
   description = "RDS instance port"
-  value       = aws_db_instance.product-db.port
+  value       = aws_db_instance.product_db.port
 }
 
 output "rds_username" {
   description = "RDS instance root username"
-  value       = aws_db_instance.product-db.username
+  value       = aws_db_instance.product_db.username
   sensitive   = true
 }
 

@@ -40,7 +40,7 @@ resource "aws_security_group" "rds" {
   }
 }
 
-resource "aws_db_parameter_group" "product-db" {
+resource "aws_db_parameter_group" "product_db" {
   name   = "product-db"
   family = "postgres14"
 
@@ -50,7 +50,7 @@ resource "aws_db_parameter_group" "product-db" {
   }
 }
 
-resource "aws_db_subnet_group" "product-db" {
+resource "aws_db_subnet_group" "product_db" {
   name       = "product-db"
   subnet_ids = data.terraform_remote_state.infra.outputs.public_subnets
 
@@ -59,7 +59,7 @@ resource "aws_db_subnet_group" "product-db" {
   }
 }
 
-resource "aws_db_instance" "product-db" {
+resource "aws_db_instance" "product_db" {
   identifier                          = "product-db"
   db_name                             = "product"
   instance_class                      = "db.t3.micro"
@@ -68,9 +68,9 @@ resource "aws_db_instance" "product-db" {
   engine_version                      = "14.1"
   username                            = "postgres"
   password                            = random_password.password.result
-  db_subnet_group_name                = aws_db_subnet_group.product-db.name
+  db_subnet_group_name                = aws_db_subnet_group.product_db.name
   vpc_security_group_ids              = [aws_security_group.rds.id]
-  parameter_group_name                = aws_db_parameter_group.product-db.name
+  parameter_group_name                = aws_db_parameter_group.product_db.name
   publicly_accessible                 = true
   skip_final_snapshot                 = true
   iam_database_authentication_enabled = true
@@ -88,10 +88,10 @@ resource "null_resource" "db_setup" {
   }
 
   # runs after database and security group providing external access is created
-  depends_on = [aws_db_instance.product-db, aws_security_group.rds]
+  depends_on = [aws_db_instance.product_db, aws_security_group.rds]
 
   provisioner "local-exec" {
-    command = "psql -U postgres -d product -h ${aws_db_instance.product-db.address} -f sql/opal_users.sql -a"
+    command = "psql -U postgres -d product -h ${aws_db_instance.product_db.address} -f sql/opal_users.sql -a"
     environment = {
       PGPASSWORD = random_password.password.result
     }
