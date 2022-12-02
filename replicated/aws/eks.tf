@@ -136,7 +136,7 @@ module "eks" {
     }
   }
 
-  # default to three workers across AZs
+  # default to three worker nodes across AZs - two nodes is okay based on t-shirt sizing.
   eks_managed_node_groups = {
     worker = {
       name         = "opal-worker"
@@ -152,11 +152,6 @@ module "eks" {
       rolearn  = aws_iam_role.eks_cluster_admin.arn
       username = aws_iam_role.eks_cluster_admin.name
       groups   = ["system:masters"]
-    },
-    {
-      rolearn  = aws_iam_role.eks_cluster_viewer.arn
-      username = aws_iam_role.eks_cluster_viewer.name
-      groups   = ["viewers"]
     }
   ]
 }

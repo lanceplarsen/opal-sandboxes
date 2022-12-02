@@ -37,5 +37,6 @@ resource "aws_db_instance" "opal" {
   publicly_accessible    = false
 
   backup_retention_period = 30
-  skip_final_snapshot     = true
+  #not for prod - make sure your Opal snapshot is not deleted by accident
+  skip_final_snapshot = true
 }
