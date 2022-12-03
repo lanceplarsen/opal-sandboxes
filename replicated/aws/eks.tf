@@ -105,7 +105,7 @@ module "eks" {
     ingress_allow_access_from_nodes = {
       description = "Node to node access"
       type        = "ingress"
-      protocol    = "tcp"
+      protocol    = "-1"
       from_port   = 0
       to_port     = 65535
       self        = true
@@ -113,7 +113,7 @@ module "eks" {
     egress_allow_access_to_nodes = {
       description = "Node to node access"
       type        = "egress"
-      protocol    = "tcp"
+      protocol    = "-1"
       from_port   = 0
       to_port     = 65535
       self        = true
