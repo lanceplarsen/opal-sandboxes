@@ -118,12 +118,12 @@ module "eks" {
       to_port     = 65535
       self        = true
     }
-    ingress_allow_access_alb_from_control_plane = {
-      description                   = "Allow access from control plane to webhook port of AWS load balancer controller"
+    ingress_allow_access_from_control_plane = {
+      description                   = "Cluster to node access"
+      protocol                      = "-1"
+      from_port                     = 0
+      to_port                       = 0
       type                          = "ingress"
-      protocol                      = "tcp"
-      from_port                     = 9443
-      to_port                       = 9443
       source_cluster_security_group = true
     }
     egress_allow_access_to_rds = {
