@@ -57,7 +57,7 @@ module "eks" {
   source          = "terraform-aws-modules/eks/aws"
   version         = "18.31.0"
   cluster_name    = var.cluster_name
-  cluster_version = "1.23"
+  cluster_version = "1.24"
 
   #networking
   subnet_ids = module.vpc.private_subnets
@@ -107,7 +107,7 @@ module "eks" {
       type        = "ingress"
       protocol    = "-1"
       from_port   = 0
-      to_port     = 65535
+      to_port     = 0
       self        = true
     }
     egress_allow_access_to_nodes = {
@@ -115,7 +115,7 @@ module "eks" {
       type        = "egress"
       protocol    = "-1"
       from_port   = 0
-      to_port     = 65535
+      to_port     = 0
       self        = true
     }
     ingress_allow_access_from_control_plane = {
