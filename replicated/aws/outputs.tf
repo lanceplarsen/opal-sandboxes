@@ -1,3 +1,13 @@
+output "eks_cluster_name" {
+  description = "EKS cluster name"
+  value       = module.eks.cluster_name
+}
+
+output "eks_cluster_region" {
+  description = "EKS cluster region"
+  value       = var.region
+}
+
 output "rds_hostname" {
   description = "RDS instance hostname"
   value       = aws_db_instance.opal.address
